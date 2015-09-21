@@ -10,8 +10,9 @@ JSからCSS操作するやつ。
 $ npm i style-handle
 ```
 ```js
-// ルール追加
 var SH = require('style-handle');
+
+// ルール追加
 SH.addRule('.hoge { prop: value; }');
 
 // まとめて追加
