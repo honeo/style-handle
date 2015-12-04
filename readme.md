@@ -1,16 +1,14 @@
-なにこれ
----
+## なにこれ
 JSからCSS操作するやつ。  
 [honeo/style-handle](https://github.com/honeo/style-handle)  
 [style-handle](https://www.npmjs.com/package/style-handle)
 
-使い方
----
+## 使い方
 ```bash
 $ npm i style-handle
 ```
 ```js
-var SH = require('style-handle');
+const SH = require('style-handle');
 
 // ルール追加
 SH.addRule('.hoge { prop: value; }');
@@ -30,8 +28,7 @@ SH.addText(`
 SH.addURL('http//example.com/hoge.css');
 ```
 
-Method
----
+## Method
 .addRule(...string)  
 .removeRule(...string or index)  
 .addText(string)  

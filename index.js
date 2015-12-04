@@ -1,7 +1,8 @@
-'use strict';
+const console = {log(){}}
 
-// 色々
-var doc = document,
+// var
+const
+	doc = document,
 	head = doc.head || doc.getElementsByTagName('head')[0];
 
 /*
@@ -14,7 +15,7 @@ var doc = document,
 		} ]
 		で入っている
 */
-var Style = {
+const Style = {
 	addedRules: []
 }
 
@@ -58,7 +59,7 @@ Style.__defineGetter__('style_text', ( ()=>{
     	2014年時点でChromeは@-webkit-以外のkeyframesを入れるとコケる
 */
 Style.addRule = (...ruleArr)=>{
-	//console.log('addRule', ruleArr);
+	console.log('addRule', ruleArr);
 	var result = [];
     ruleArr.forEach( (v)=>{
         var index = Style.CSSSS.insertRule(
@@ -84,7 +85,7 @@ Style.addRule = (...ruleArr)=>{
 		cssRulesのを削除したらaddedRulesのも削除。
 */
 Style.removeRule = (...ruleArr)=>{
-	//console.log('removeRule', ruleArr);
+	console.log('removeRule', ruleArr);
 	ruleArr.forEach( (arg)=>{
 		if(typeof arg==='number'){
 			Style.CSSSS.deleteRule( arg );
@@ -110,7 +111,7 @@ Style.removeRule = (...ruleArr)=>{
 	大雑把に追加
 */
 Style.addText = (text)=>{
-	//console.log('addText', text);
+	console.log('addText', text);
 	Style.style_text.appendChild( doc.createTextNode(text) );
 	return text;
 }
@@ -121,7 +122,7 @@ Style.addText = (text)=>{
         引数と同じものが複数あったら全部無くなっちゃうけど大雑把だから許してくれるね
 */
 Style.removeText = (text)=>{
-	//console.log('removeText', text);
+	console.log('removeText', text);
     Array.from( Style.style_text.childNodes ).forEach( (v)=>{
 		v.nodeType===3 && ( v.nodeValue = v.nodeValue.replace(text, '') );
 	});
@@ -131,7 +132,7 @@ Style.removeText = (text)=>{
 	引数URLの.cssファイルを読み込む
 */
 Style.addURL = (str)=>{
-	//console.log('addURL', str);
+	console.log('addURL', str);
 	var link = doc.createElement('link');
 	link.setAttribute('href', str);
 	link.setAttribute('rel', 'stylesheet');
@@ -153,4 +154,4 @@ Style.removeURL = (str)=>{
 }
 
 //console.log('style-handle', Style);
-export default Style;
+module.exports = Style;
