@@ -1,4 +1,9 @@
+/*
+	返り値のモジュールオブジェクト.debugがtrueならコンソール出力
+*/
+
 // Modules
+import {is, not} from '@honeo/type-check';
 import makeElement from 'make-element';
 
 // var
@@ -7,7 +12,9 @@ const
 	head = doc.head;
 
 // 本体、APIの入れもの
-const StyleHandle = {}
+const StyleHandle = {
+	debug: false
+}
 
 /*
 	骨組み
@@ -60,7 +67,10 @@ const getStyleForText = do{
 		追加したルールの詳細オブジェクトをaddedRulesに記録する
 */
 StyleHandle.addRule = (rule)=>{
-	//console.log('addRule', rule);
+	StyleHandle.debug && console.log('addRule', rule);
+	if( not.str(rule) ){
+		throw new TypeError('Invalid argument');
+	}
 	const CSSSS = getCSSSS();
     const index = CSSSS.insertRule(rule, CSSSS.cssRules.length);
 	const resultObj = {
@@ -74,18 +84,20 @@ StyleHandle.addRule = (rule)=>{
 
 /*
 	addRuleの複数版
+		引数チェックはaddRuleで行うため省略
 */
 StyleHandle.addRules = (...ruleArr)=>{
-	//console.log('addRules', ruleArr);
+	StyleHandle.debug && console.log('addRules', ruleArr);
 	return ruleArr.map(StyleHandle.addRule);
 }
 
 
 /*
 	_removeRuleの可変長引数対応版
+		引数チェックは_removeRuleで行うため省略
 */
 StyleHandle.removeRule = (...args)=>{
-	//console.log('removeRule', args);
+	StyleHandle.debug && console.log('removeRule', args);
 	args.forEach(_removeRule);
 }
 
@@ -96,7 +108,7 @@ StyleHandle.removeRule = (...args)=>{
 		addedRulesからも削除
 */
 function _removeRule(arg){
-	//console.log('_removeRule', arg);
+	StyleHandle.debug && console.log('_removeRule', arg);
 	const CSSSS = getCSSSS();
 	if(typeof arg==='number'){
 		CSSSS.deleteRule( arg );
@@ -108,7 +120,7 @@ function _removeRule(arg){
 		}
 	}else if(typeof arg==='string'){
 		const index = addedRules.findIndex( (obj)=>{
-			//console.log('_removeRule-string', obj, addedRules.length)
+			StyleHandle.debug && console.log('_removeRule-string', obj, addedRules.length)
 			return arg===obj.originText;
 		});
 		if(typeof index==='number'){
@@ -124,7 +136,10 @@ function _removeRule(arg){
 	大雑把に追加
 */
 StyleHandle.addText = (text)=>{
-	//console.log('addText', text);
+	StyleHandle.debug && console.log('addText', text);
+	if( not.str(text) ){
+		throw new TypeError('Invalid argument');
+	}
 	const style = getStyleForText();
 	style.appendChild( doc.createTextNode(text) );
 	return text;
@@ -136,7 +151,10 @@ StyleHandle.addText = (text)=>{
         引数と同じものが複数あったら全部無くなっちゃうけど大雑把だから許してくれるね
 */
 StyleHandle.removeText = (text)=>{
-	//console.log('removeText', text);
+	StyleHandle.debug && console.log('removeText', text);
+	if( not.str(text) ){
+		throw new TypeError('Invalid argument');
+	}
 	const style = getStyleForText();
     Array.from( style.childNodes ).forEach( (v)=>{
 		v.nodeType===3 && ( v.nodeValue = v.nodeValue.replace(text, '') );
@@ -147,7 +165,10 @@ StyleHandle.removeText = (text)=>{
 	引数URLの.cssファイルを読み込む
 */
 StyleHandle.addURL = (href)=>{
-	//console.log('addURL', href);
+	StyleHandle.debug && console.log('addURL', href);
+	if( not.str(text) ){
+		throw new TypeError('Invalid argument');
+	}
 	const link = makeElement('link', {
 		href,
 		rel: 'stylesheet',
@@ -161,12 +182,15 @@ StyleHandle.addURL = (href)=>{
 	引数URLの.cssファイル読み込みを削除
 */
 StyleHandle.removeURL = (href)=>{
-	//console.log('removeURL', href);
-	var linkArr = Array.from( head.getElementsByClassName('style-handle-url') );
-	var link = linkArr.find( (v)=>{
-		return v.href===href;
+	StyleHandle.debug && console.log('removeURL', href);
+	if( not.str(text) ){
+		throw new TypeError('Invalid argument');
+	}
+	const linkArr = Array.from( head.getElementsByClassName('style-handle-url') );
+	const link_target = linkArr.find( (link)=>{
+		return link.href===href;
 	});
-	link && link.remove();
+	link_target && link_target.remove();
 }
 
 export default StyleHandle;
