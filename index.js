@@ -166,7 +166,7 @@ StyleHandle.removeText = (text)=>{
 */
 StyleHandle.addURL = (href)=>{
 	StyleHandle.debug && console.log('addURL', href);
-	if( not.str(text) ){
+	if( not.str(href) ){
 		throw new TypeError('Invalid argument');
 	}
 	const link = makeElement('link', {
@@ -183,14 +183,12 @@ StyleHandle.addURL = (href)=>{
 */
 StyleHandle.removeURL = (href)=>{
 	StyleHandle.debug && console.log('removeURL', href);
-	if( not.str(text) ){
+	if( not.str(href) ){
 		throw new TypeError('Invalid argument');
 	}
-	const linkArr = Array.from( head.getElementsByClassName('style-handle-url') );
-	const link_target = linkArr.find( (link)=>{
-		return link.href===href;
-	});
-	link_target && link_target.remove();
+	const link = head.querySelector(`link.style-handle-url[href="${href}"]`);
+	link && link.remove();
+
 }
 
 export default StyleHandle;
