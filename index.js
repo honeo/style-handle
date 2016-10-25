@@ -106,6 +106,7 @@ StyleHandle.removeRule = (...args)=>{
 		引数が数値ならその番号のルールを削除
 		引数が文字列ならaddedRulesから一致するものを探して削除
 		addedRulesからも削除
+		未登録の引数だった場合、findIndexで-1が返るため0以上判定をしている
 */
 function _removeRule(arg){
 	StyleHandle.debug && console.log('_removeRule', arg);
@@ -124,7 +125,9 @@ function _removeRule(arg){
 			return arg===obj.originText;
 		});
 		if(typeof index==='number'){
-			CSSSS.deleteRule( addedRules[index].index );
+			console.log('index', index);
+			const target = addedRules[index];
+			target && CSSSS.deleteRule( target.index );
 			addedRules.slice(index, 1)
 		}
 	}else{
